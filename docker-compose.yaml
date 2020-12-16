@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: '.'
+      dockerfile: './.docker/php/Dockerfile'
+    restart: unless-stopped
+    environment:
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - 'php-fpm:/var/run/php-fpm:rw'
+      - './.docker/php/php.ini:/usr/local/php/php.ini:ro'
+      - './.docker/php/php-fpm.d:/usr/local/etc/php-fpm.d:ro'
+      - './src:/var/www/html/src:ro'
+
+  web:
+    image: 'nginx:alpine'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    environment:
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - 'php-fpm:/var/run/php-fpm:rw'
+      - './.docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro'
+      - './.docker/nginx/conf.d:/etc/nginx/conf.d:ro'
+      - './public:/var/www/html/public:ro'
+    depends_on:
+      - app
+
+volumes:
+  php-fpm:
