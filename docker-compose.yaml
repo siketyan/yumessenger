@@ -25,7 +25,7 @@ services:
       - 'php-fpm:/var/run/php-fpm:rw'
       - './.docker/php/php.ini:/usr/local/php/php.ini:ro'
       - './.docker/php/php-fpm.d:/usr/local/etc/php-fpm.d:ro'
-      - './src:/var/www/html/src:ro'
+      - './src:/var/www/html/src:rw'
       - './migrations:/var/www/html/migrations:rw'
     depends_on:
       - mysql
