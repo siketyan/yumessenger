@@ -8,14 +8,16 @@ use App\Repository\UserRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\HasLifecycleCallbacks()
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -38,6 +40,16 @@ class User
     #[Assert\Email]
     #[Groups(['show', 'create'])]
     private string $email;
+
+    #[Assert\NotBlank]
+    #[Groups(['create'])]
+    private string $password;
+
+    /**
+     * @ORM\Column(type="ascii_string", length=255)
+     */
+    #[Ignore]
+    private string $hash;
 
     /**
      * @ORM\Column(type="datetime")
@@ -74,6 +86,25 @@ class User
         return $this;
     }
 
+    public function getPasswordRaw(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): User
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function setHash(string $hash): User
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
     public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
@@ -92,5 +123,45 @@ class User
     public function onCreate(): void
     {
         $this->createdAt = new DateTimeImmutable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles(): array
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPassword(): string
+    {
+        return $this->hash;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials(): void
+    {
+        $this->password = '';
     }
 }
