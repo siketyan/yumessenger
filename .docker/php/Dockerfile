@@ -1,7 +1,8 @@
 FROM php:8.0-fpm-alpine
 
-RUN apk --update --no-cache add oniguruma-dev tzdata
-RUN docker-php-ext-install mbstring pdo_mysql
+RUN apk --update --no-cache add git oniguruma-dev tzdata
+RUN git clone -b 5.3.2 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis
+RUN docker-php-ext-install mbstring pdo_mysql redis
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
