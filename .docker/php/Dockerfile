@@ -13,6 +13,6 @@ RUN mkdir -p /var/log/fpm \
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY . /var/www/html
-RUN composer install
+RUN composer install --ignore-platform-reqs
 
 ENTRYPOINT ["php-fpm", "-F", "-O"]
