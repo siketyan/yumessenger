@@ -12,17 +12,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 #[Route('/users')]
 class CreateController
 {
     private EntityManagerInterface $entityManager;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        UserPasswordEncoderInterface $passwordEncoder,
     ) {
         $this->entityManager = $entityManager;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
@@ -40,6 +44,10 @@ class CreateController
         if ($validationErrors->count() > 0) {
             throw new BadRequestHttpException();
         }
+
+        $user->setHash(
+            $this->passwordEncoder->encodePassword($user, $user->getPasswordRaw()),
+        );
 
         try {
             $this->entityManager->persist($user);
