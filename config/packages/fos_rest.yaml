@@ -2,6 +2,7 @@
 fos_rest:
     body_converter:
         enabled: true
+        validate: true
 #    param_fetcher_listener:  true
 #    allowed_methods_listener:  true
 #    routing_loader: true
