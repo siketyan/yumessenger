@@ -6,8 +6,8 @@ namespace App\Controller\Security;
 
 use App\DTO\LoginRequest;
 use App\DTO\LoginResponse;
-use App\Entity\Session;
 use App\Repository\UserRepository;
+use App\Security\Session;
 use App\Security\SessionStorage;
 use App\Security\Token;
 use DateTimeImmutable;
@@ -68,9 +68,6 @@ class LoginController
                 $user,
                 (new DateTimeImmutable())->modify('+30 minutes'),
             );
-
-            $this->entityManager->persist($session);
-            $this->entityManager->flush();
 
             $token = Token::create($user);
             $this->sessionStorage->save($token, $session);

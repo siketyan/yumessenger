@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
-use App\Entity\Session;
+use App\Security\Session;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class LoginResponse
