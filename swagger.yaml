@@ -1,0 +1,334 @@
+---
+swagger: '2.0'
+
+info:
+  description: ''
+  version: '1.0.0'
+  title: 'Message App'
+  contact:
+    email: 'n_ikeguchi@yumemi.co.jp'
+
+host: 'production.host.tld'
+basePath: '/v1'
+
+schemes:
+  - 'https'
+
+paths:
+  '/messages':
+    get:
+      tags:
+        - 'messages'
+      summary: 'Lists the messages all posted (default limit 100)'
+      operationId: 'getMessages'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: 'Successful'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Message'
+      security:
+        - Bearer: []
+
+    post:
+      tags:
+        - 'messages'
+      summary: 'Creates a message'
+      operationId: 'createMessage'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'message'
+          description: 'The message object to be created'
+          required: true
+          schema:
+            $ref: '#/definitions/Message'
+      responses:
+        '201':
+          description: 'Successfully created'
+          schema:
+            $ref: '#/definitions/Message'
+        '400':
+          description: 'Invalid message supplied'
+      security:
+        - Bearer: []
+
+  '/messages/{id}':
+    delete:
+      tags:
+        - 'messages'
+      summary: 'Deletes a message'
+      operationId: 'deleteMessage'
+      consumes:
+        - 'application/json'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'The identifier of the message to delete'
+          required: true
+          type: 'string'
+          format: 'uuid'
+      responses:
+        '204':
+          description: 'Successful'
+        '404':
+          description: 'Message not found'
+      security:
+        - Bearer: []
+
+  '/likes':
+    post:
+      tags:
+        - 'likes'
+      summary: 'Add like'
+      operationId: 'addLike'
+      parameters:
+        - $ref: '#/parameters/MessageRef'
+      responses:
+        '201':
+          description: 'Successful'
+      security:
+        - Bearer: []
+
+  '/likes/{id}':
+    delete:
+      tags:
+        - 'likes'
+      summary: 'Deletes a like'
+      operationId: 'deleteLike'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'The identifier of the message of likes to delete'
+          required: true
+          type: 'string'
+          format: 'uuid'
+      responses:
+        '204':
+          description: 'Successful'
+        '404':
+          description: 'Like not found'
+      security:
+        - Bearer: []
+
+  '/auth':
+    post:
+      tags:
+        - 'sessions'
+      summary: 'Creates a session'
+      description: 'Logs the user into the app.'
+      operationId: 'createSession'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'credential'
+          description: 'The credential to authenticate the user'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              email:
+                type: 'string'
+              password:
+                type: 'string'
+      responses:
+        '201':
+          description: 'Successful'
+          schema:
+            type: 'object'
+            properties:
+              token:
+                $ref: '#/definitions/AccessToken'
+              session:
+                $ref: '#/definitions/Session'
+        '400':
+          description: 'Invalid credential supplied'
+
+  '/users':
+    post:
+      tags:
+        - 'users'
+      summary: 'Creates a user'
+      description: 'This can only be done by the logged in user.'
+      operationId: 'createUser'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'user'
+          description: 'The user object to be created'
+          required: true
+          schema:
+            allOf:
+              - $ref: '#/definitions/User'
+              - type: 'object'
+                required:
+                  - 'password'
+                properties:
+                  password:
+                    type: 'string'
+      responses:
+        '200':
+          description: 'Successful'
+          schema:
+            $ref: '#/definitions/User'
+
+  '/users/{id}':
+    get:
+      tags:
+        - 'users'
+      summary: 'Get user by unique ID'
+      operationId: 'getUserById'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'id'
+          in: 'path'
+          description: 'The identifier of the user to be queried'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'Successful'
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'User not found'
+      security:
+        - Bearer: []
+
+    delete:
+      tags:
+        - 'users'
+      summary: 'Deletes a user'
+      description: 'This can only be done by the logged in user.'
+      operationId: 'deleteUser'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'id'
+          in: 'path'
+          description: 'The identifier of the user to be deleted'
+          required: true
+          type: 'string'
+      responses:
+        '400':
+          description: 'Invalid ID supplied'
+        '404':
+          description: 'User not found'
+      security:
+        - Bearer: []
+
+securityDefinitions:
+  Bearer:
+    description: |
+      * format
+        * `Bearer {access_token}`
+    type: apiKey
+    in: header
+    name: Authorization
+
+definitions:
+  AccessToken:
+    description: 'sha1({user_id} . uniqid(true) . mt_rand())'
+    type: 'string'
+    example: 'd3f9c8dd2e60e6d79369cae61b15d9a09868224b'
+
+  Message:
+    type: 'object'
+    required:
+      - 'text'
+    properties:
+      id:
+        type: 'string'
+        format: 'uuid'
+        readOnly: true
+      text:
+        type: 'string'
+      author:
+        allOf:
+          - $ref: '#/definitions/User'
+          - readOnly: true
+      likes:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Like'
+      created_at:
+        type: 'string'
+        format: 'date-time'
+        readOnly: true
+
+  Like:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+        format: 'uuid'
+        readOnly: true
+      user:
+        allOf:
+          - $ref: '#/definitions/User'
+          - readOnly: true
+      created_at:
+        type: 'string'
+        format: 'date-time'
+        readOnly: true
+
+  Session:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+        format: 'date-time'
+        readOnly: true
+      user:
+        allOf:
+          - $ref: '#/definitions/User'
+          - readOnly: true
+      expires_at:
+        type: 'string'
+        format: 'date-time'
+        readOnly: true
+
+  User:
+    type: 'object'
+    required:
+      - 'name'
+    properties:
+      id:
+        type: 'string'
+        format: 'uuid'
+        readOnly: true
+      nickname:
+        type: 'string'
+      email:
+        type: 'string'
+        format: 'email'
+      created_at:
+        type: 'string'
+        format: 'date-time'
+        readOnly: true
+
+parameters:
+  MessageRef:
+    name: 'messageRef'
+    in: 'body'
+    schema:
+      type: 'object'
+      properties:
+        message_id:
+          type: 'string'
+          format: 'uuid'
