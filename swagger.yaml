@@ -258,6 +258,30 @@ definitions:
         readOnly: true
       text:
         type: 'string'
+      author:
+        allOf:
+          - $ref: '#/definitions/User'
+          - readOnly: true
+      likes:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Like'
+      created_at:
+        type: 'string'
+        format: 'date-time'
+        readOnly: true
+
+  Like:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+        format: 'uuid'
+        readOnly: true
+      user:
+        allOf:
+          - $ref: '#/definitions/User'
+          - readOnly: true
       created_at:
         type: 'string'
         format: 'date-time'
