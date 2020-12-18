@@ -21,6 +21,18 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
+    public function findRecent(int $limit = 100): array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb
+            ->orderBy('m.createdAt', 'desc')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Message[] Returns an array of Message objects
     //  */
