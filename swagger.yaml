@@ -298,7 +298,7 @@ definitions:
         allOf:
           - $ref: '#/definitions/User'
           - readOnly: true
-      expired_at:
+      expires_at:
         type: 'string'
         format: 'date-time'
         readOnly: true
