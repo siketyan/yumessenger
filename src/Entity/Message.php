@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\MessageRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -51,6 +52,11 @@ class Message
      */
     #[Groups(['show'])]
     private DateTimeInterface $createdAt;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
 
     public function getId(): string
     {
