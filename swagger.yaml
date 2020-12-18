@@ -89,7 +89,7 @@ paths:
       summary: 'Add like'
       operationId: 'addLike'
       parameters:
-        - $ref: '#/parameters/MessageId'
+        - $ref: '#/parameters/MessageRef'
       responses:
         '201':
           description: 'Successful'
@@ -294,12 +294,12 @@ definitions:
         readOnly: true
 
 parameters:
-  MessageId:
-    name: MessageId
-    in: body
+  MessageRef:
+    name: 'messageRef'
+    in: 'body'
     schema:
-      type: object
+      type: 'object'
       properties:
         message_id:
-          type: string
-          example: a0eebc99-9c0b4ef8-bb6d6bb9-bd380a11
+          type: 'string'
+          format: 'uuid'
