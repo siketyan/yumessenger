@@ -69,9 +69,6 @@ class LoginController
                 (new DateTimeImmutable())->modify('+30 minutes'),
             );
 
-            $this->entityManager->persist($session);
-            $this->entityManager->flush();
-
             $token = Token::create($user);
             $this->sessionStorage->save($token, $session);
 
