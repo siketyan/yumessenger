@@ -136,7 +136,7 @@ paths:
           schema:
             type: 'object'
             properties:
-              mail_address:
+              email:
                 type: 'string'
               password:
                 type: 'string'
