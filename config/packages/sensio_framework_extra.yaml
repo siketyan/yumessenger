@@ -3,3 +3,6 @@ sensio_framework_extra:
         annotations: false
     view:
         annotations: true
+    request:
+        converters: true
+        auto_convert: true
