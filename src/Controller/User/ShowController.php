@@ -7,8 +7,12 @@ namespace App\Controller\User;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
+ */
 #[Route('/users')]
 class ShowController
 {
@@ -21,7 +25,7 @@ class ShowController
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"show"})
      *
      * @param User $user
      *
