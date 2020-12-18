@@ -4,12 +4,12 @@ enablePlugins(GatlingPlugin)
 
 ThisBuild / scalaVersion     := "2.13.4"
 ThisBuild / version          := "0.1.0-SNAPSHOT"
-ThisBuild / organization     := "com.example"
-ThisBuild / organizationName := "example"
+ThisBuild / organization     := "jp.co.yumemi"
+ThisBuild / organizationName := "yumemi"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "Yumessenger",
+    name := "yumessenger",
     libraryDependencies ++= gatling
   )
 
