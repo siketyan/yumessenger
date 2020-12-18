@@ -31,7 +31,7 @@ class CreateController
 
     /**
      * @ParamConverter("user", converter="fos_rest.request_body", options={"deserializationContext"={"groups"={"create"}}})
-     * @Rest\View(serializerGroups={"show"})
+     * @Rest\View(statusCode=201, serializerGroups={"show"})
      *
      * @param User $user
      * @param ConstraintViolationListInterface $validationErrors
