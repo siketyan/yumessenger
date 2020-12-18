@@ -96,7 +96,7 @@ paths:
       security:
         - Bearer: []
 
-  '/likes/{message_id}':
+  '/likes/{id}':
     delete:
       tags:
         - 'likes'
@@ -104,8 +104,8 @@ paths:
       operationId: 'deleteLike'
       parameters:
         - in: 'path'
-          name: 'message_id'
-          description: 'The identifier of the like to delete'
+          name: 'id'
+          description: 'The identifier of the message of likes to delete'
           required: true
           type: 'string'
           format: 'uuid'
