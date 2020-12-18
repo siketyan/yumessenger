@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use DateTimeImmutable;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,8 +53,9 @@ class BearerAuthenticator extends AbstractAuthenticator
         );
 
         $session = $this->sessionStorage->load($token);
+        $now = new DateTimeImmutable();
 
-        if ($session === null) {
+        if ($session === null || $session->getExpiresAt() <= $now) {
             throw new BadCredentialsException();
         }
 
