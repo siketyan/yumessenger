@@ -8,6 +8,8 @@ services:
       TZ: 'Asia/Tokyo'
     env_file:
       - './.docker/mysql/.env'
+    ports:
+      - '3306:3306'
     volumes:
       - 'db:/var/lib/mysql:rw'
 
