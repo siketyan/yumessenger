@@ -19,7 +19,7 @@ paths:
     get:
       tags:
         - 'messages'
-      summary: 'Lists the messages all posted. (defalut limit 100)'
+      summary: 'Lists the messages all posted (default limit 100)'
       operationId: 'getMessages'
       produces:
         - 'application/json'
@@ -58,6 +58,7 @@ paths:
           description: 'Invalid message supplied'
       security:
         - Bearer: []
+
   '/messages/{id}':
     delete:
       tags:
@@ -91,7 +92,7 @@ paths:
         - $ref: '#/parameters/MessageId'
       responses:
         '201':
-          description: 'Successfull'
+          description: 'Successful'
       security:
         - Bearer: []
 
@@ -240,6 +241,7 @@ definitions:
     description: 'sha1({user_id} . uniqid(true) . mt_rand())'
     type: 'string'
     example: 'd3f9c8dd2e60e6d79369cae61b15d9a09868224b'
+
   Message:
     type: 'object'
     required:
@@ -290,6 +292,7 @@ definitions:
         type: 'string'
         format: 'date-time'
         readOnly: true
+
 parameters:
   MessageId:
     name: MessageId
