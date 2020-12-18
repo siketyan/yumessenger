@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\MessageRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -40,6 +41,12 @@ class Message
     private User $author;
 
     /**
+     * @ORM\OneToMany(targetEntity=Like::class, mappedBy="message", orphanRemoval=true, fetch="EAGER")
+     */
+    #[Groups(['show'])]
+    private Collection $likes;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     #[Groups(['show'])]
@@ -70,6 +77,21 @@ class Message
     public function setAuthor(User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(Collection $likes): self
+    {
+        $this->likes = $likes;
 
         return $this;
     }
