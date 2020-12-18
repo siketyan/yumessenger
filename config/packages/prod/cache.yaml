@@ -18,4 +18,5 @@ framework:
         pools:
             #my.dedicated.cache: null
             cache.sessions:
-                adapter: cache.app
+                adapter: cache.adapter.redis
+                provider: '%env(REDIS_URL)%'

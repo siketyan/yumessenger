@@ -25,8 +25,7 @@ services:
     environment:
       TZ: 'Asia/Tokyo'
     env_file:
-      - '.env'
-      - '.env.local'
+      - './.docker/php/.env'
     volumes:
       - 'php-fpm:/var/run/php-fpm:rw'
       - './.docker/php/php.ini:/usr/local/php/php.ini:ro'
@@ -34,6 +33,7 @@ services:
       - './config:/var/www/html/config:ro'
       - './src:/var/www/html/src:rw'
       - './migrations:/var/www/html/migrations:rw'
+      - './tests:/var/www/html/tests:ro'
     depends_on:
       - mysql
       - cache
