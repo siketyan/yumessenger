@@ -6,3 +6,6 @@ migration:
 
 migrate:
 	docker-compose exec app ./bin/console doctrine:migrations:migrate
+
+e2e:
+	cd gatling && GATLING_MODE=E2E sbt gatling:test
