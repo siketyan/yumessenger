@@ -41,7 +41,9 @@ services:
       - cache
 
   web:
-    image: 'nginx:alpine'
+    build:
+      context: '.'
+      dockerfile: './.docker/nginx/Dockerfile'
     restart: unless-stopped
     ports:
       - '80:80'
