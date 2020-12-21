@@ -7,6 +7,8 @@ import io.gatling.http.protocol.HttpProtocolBuilder
 import yumessenger.Config
 import yumessenger.api._
 
+import scala.concurrent.duration.DurationInt
+import scala.language.postfixOps
 import scala.util.Random
 
 class ApiSimulation extends Simulation with Config {
@@ -52,7 +54,14 @@ class ApiSimulation extends Simulation with Config {
   setUp(
     user
       .inject(
-        atOnceUsers(1),
+        sys.env("GATLING_MODE") match {
+          case "E2E" => atOnceUsers(1)
+          case "STRESS" =>
+            incrementUsersPerSec(1)
+              .times(5)
+              .eachLevelLasting(10 seconds)
+              .startingFrom(0)
+        }
       )
       .protocols(
         protocol,
