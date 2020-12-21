@@ -11,6 +11,9 @@ RUN mkdir -p /var/log/fpm \
     && ln -fns /dev/stdout /var/log/fpm/access.log \
     && ln -fns /dev/stderr /var/log/fpm/access.log
 
+ADD ./.docker/php/php.ini /usr/local/php/php.ini
+ADD ./.docker/php/php-fpm.d /usr/local/etc/php-fpm.d
+
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
 COPY . /var/www/html
