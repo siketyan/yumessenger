@@ -27,7 +27,7 @@ class Like
     private string $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\ManyToOne(targetEntity=User::class, fetch="EAGER")
      */
     #[Groups(['show'])]
     private User $user;
