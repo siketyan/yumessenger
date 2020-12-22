@@ -36,7 +36,7 @@ class Message
     private string $text;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\ManyToOne(targetEntity=User::class, fetch="EAGER")
      */
     #[Groups(['show'])]
     private User $author;
