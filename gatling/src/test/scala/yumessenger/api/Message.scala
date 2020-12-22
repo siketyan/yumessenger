@@ -35,7 +35,7 @@ object Message {
         .header(HttpHeaderNames.Authorization, "Bearer ${token}")
         .check(status.is(200))
         .check(jsonPath("$[*]").count.gte(1))
-        .check(jsonPath("$[*].id").find(1).exists)
+        .check(jsonPath("$[*].id").find(0).exists)
     )
 
   val delete: ChainBuilder =
