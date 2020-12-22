@@ -23,14 +23,11 @@ class MessageRepository extends ServiceEntityRepository
 
     public function findRecent(int $limit = 100): array
     {
-        $qb = $this->createQueryBuilder('m');
-
-        return $qb
-            ->orderBy('m.createdAt', 'desc')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->findBy(
+            [],
+            ['createdAt' => 'desc'],
+            $limit,
+        );
     }
 
     // /**
