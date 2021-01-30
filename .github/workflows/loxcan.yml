@@ -9,13 +9,12 @@ on:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    if: false
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - uses: siketyan/loxcan@v0.4.1
+      - uses: siketyan/loxcan@v0.4.2
         with:
           owner: ${{ github.event.repository.owner.login }}
           repo: ${{ github.event.repository.name }}
